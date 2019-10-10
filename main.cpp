@@ -1,11 +1,12 @@
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
 int getNumberOfDays(int month, int year)
 {
     //calculates leap year for february
-    if( month == 2)
+    if(month == 2)
     {
         if((year%400==0) || (year%4==0 && year%100!=0))
             return 29;
@@ -25,9 +26,10 @@ int main() {
      int month, day, year, totalDays, choice, amountOfMonths;
 
      do {
-         cout << "\n\t\t1.) How many days have passed in the year? "
-              << "\n\t\t2.) What is the date from how many days have passed? "
-              << "\n\n\t\tPlease input (1 or 2):";
+         cout << "\nThis program will find days passed or date in the year"
+              << "\n\t\t1) Input date (mm/dd/yyyy) to find days passed "
+              << "\n\t\t2) Input passed days to find date in the year "
+              << "\n\t\t\tYour choice (1/2): ";
          cin  >> choice;
 
          switch (choice)
@@ -35,43 +37,55 @@ int main() {
              case 1:
                  totalDays = 0;
 
-                 cout << "\n\tPlease input month, date and year in this format (M/D/YYYY) : ";
+                 cout << "\n\t\tPlease input date (mm/dd/yyyy): ";
                  cin  >> month >> buff >> day >> buff >> year;
 
-                 for (int i = 1; i < month; i++)
-                     totalDays += getNumberOfDays(i, year);
+                 if (month <= 12 && day <= getNumberOfDays(month, year) && (year <= 2019 || year > 0)) {
+                     for (int i = 1; i < month; i++)
+                         totalDays += getNumberOfDays(i, year);
 
-                 totalDays += day;
+                     totalDays += day;
 
-                 cout << "\n\t\tNumber of days passed :  " << totalDays;
+                     cout << "\n\t\tThere are " << totalDays << " days passed in the year " << year;
+                 }
+                 else {
+                     cout << "\n\t\tSorry, something wrong with days or year.";
+                 }
                  break;
              case 2:
                  totalDays = 0;
                  amountOfMonths = 1;
+                 day = 0;
+                 year = 0;
+                 month = 0;
 
-                 cout << "\n\tPlease give the year for context: ";
-                 cin  >> year;
-                 cout << "\n\tPlease input amount of days passed to output the date: ";
+                 cout << "\n\t\tInput days: ";
                  cin  >> totalDays;
+                 cout << "\n\t\t" << setw(10) << "Year: ";
+                 cin  >> year;
 
-                 for (int i = 1; i < 12; i++) {
-                     totalDays -= getNumberOfDays(i, year);
-                     amountOfMonths++;
+                 for (int i = 1; i <= 12; i++) {
                      if (totalDays <= getNumberOfDays(amountOfMonths, year))
                      {
                          day = totalDays;
-                         month = amountOfMonths;
                          break;
                      }
+                     else {
+                         totalDays -= getNumberOfDays(i, year);
+                         amountOfMonths++;
+                     }
                  }
-                 cout << "\n\t\tThe date is: " << month << "/" << day << "/" << year;
+                 if (totalDays <= getNumberOfDays(amountOfMonths, year) && amountOfMonths <= 12 && (year > 0 || year <= 2019))
+                     cout << "\n\t\tThe date is: " << amountOfMonths << "/" << day << "/" << year;
+                 else
+                     cout << "\n\t\tSorry, something wrong with days or year.";
                  break;
              default:
                  cout << "\n\t\tPlease input (1/2)!!! : ";
                  break;
          }
 
-         cout << "\n\n\tDo more (Y/N) ? ";
+         cout << "\n\n\t\tDo more (Y/N) ? ";
          cin  >> more;
 
      } while (more == 'y' || more == 'Y');
